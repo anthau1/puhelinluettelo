@@ -3,29 +3,29 @@ import { useState, useEffect } from 'react'
 import axios from 'axios';
 import './App.css'
 
-
 function ErrorMessage({Error,Message}) {
 
-var classname= "error"
+var classname= "error";
+var message1=Message.split(":")[0];
+var messagebody=Message.split(":")[1]
 
-    if(Error===false)
+    if(message1.includes("OK")===true)
     {
         classname= "success"
     }
     if(Message!=="")
-    return(<p className={classname} >{Message}</p>)
-
+    return(<p className={classname} >{messagebody}</p>)
     return (<></>)
 }
 
-const Form1=({array, setArray})=> {
+const Form1=({array, setArray})=> {2
     const [newName, setNewName] = useState('')
     const [phone, setPhone] = useState('')
     const [error, setError] = useState("")
 
     return (
-
-        <>  <ErrorMessage  Error={true} Message={error}></ErrorMessage>
+        <>
+            <ErrorMessage  Error={true} Message={error}></ErrorMessage>
             <form>
                 <div>
                     name: <input onChange={(event) => setNewName(event.target.value)}/>
@@ -37,13 +37,14 @@ const Form1=({array, setArray})=> {
                     <button type="submit" onClick={(event) => {
                         event.preventDefault()
                         var phonebook = {}
-
                         phonebook.name = newName
                         phonebook.number = phone;
-                        axios.post(`http://localhost:3001/api/person/`, phonebook).then(response => {
+                         axios.post(`http://localhost:3001/api/person/`, phonebook).then(response => {
+                             setError(response.data.message)
                         })
                             .catch(function (error) {
-                                setError(error.response.data.error)
+                             //   console.log(error.response.data)
+                                setError(error.response.data.error111)
                             });
                         }}
                     >add
@@ -57,9 +58,9 @@ const Form1=({array, setArray})=> {
         )}
 
 
-
 const App = () => {
     const [array,setArray] = useState([]);
+
     useEffect(() => {
         axios
             .get('http://localhost:3001/api/all')
@@ -77,13 +78,12 @@ const App = () => {
                     if(array1.find((element) => element.name === person.name)===-1)  {
                         alert("moi")
                     }
-
                 })
                 setArray(array.concat(array1));
             })
     }, [])
 
-if(array.length === 0){
+if(array.length <0){
     return (<div>Nothing found</div>)
 }
     return (
