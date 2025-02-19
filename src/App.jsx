@@ -17,7 +17,7 @@ var messagebody=Message.split(":")[1]
     return(<p className={classname} >{messagebody}</p>)
     return (<></>)
 }
-
+   
 const Form1=({array, setArray})=> {2
     const [newName, setNewName] = useState('')
     const [phone, setPhone] = useState('')
